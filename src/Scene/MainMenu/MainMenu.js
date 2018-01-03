@@ -1,5 +1,9 @@
 
 var MainScene = cc.Scene.extend({
+    ctor:function () {
+      this._super();
+      cc.audioEngine.playMusic(res.Main_BGM_mp3,true);
+    },
     onEnter:function () {
         this._super();
 
