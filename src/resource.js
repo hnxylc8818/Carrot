@@ -7,7 +7,8 @@ var res = {
     ROCKER_HANDLE_png:"res/Rocker/virtual_rocker_handle_s.png",
 
     // music
-    Main_BGM_mp3:"res/Audio/Music/main_bg.mp3"
+    Main_BGM_mp3:"res/Audio/Music/main_bg.mp3",
+    Btn_Click_Effect_mp3:"res/Audio/Music/btn_click_effect.mp3"
 };
 
 var g_resources = [];

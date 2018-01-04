@@ -35,6 +35,7 @@ var MMMainLayer = cc.Layer.extend({
             adventureDisabled,
             function () {
                 cc.log("点击冒险模式按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         adventure.setPosition(110, 45);
@@ -50,6 +51,7 @@ var MMMainLayer = cc.Layer.extend({
             bossDisabled,
             function () {
                 cc.log("点击Boss模式按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         boss.setPosition(310, 45);
@@ -65,6 +67,7 @@ var MMMainLayer = cc.Layer.extend({
             nestDisabled,
             function () {
                 cc.log("点击怪物窝按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         nest.setPosition(510, 45);
@@ -96,6 +99,7 @@ var MMMainLayer = cc.Layer.extend({
             settingDisabled,
             function () {
                 cc.log("点击设置按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         setting.setPosition(120, 145);
@@ -116,6 +120,7 @@ var MMMainLayer = cc.Layer.extend({
             helpDisabled,
             function () {
                 cc.log("点击帮助按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         help.setPosition(0, 145);
@@ -230,6 +235,7 @@ var MMMainLayer = cc.Layer.extend({
             heartDisabled,
             function () {
                 cc.log("点击点心按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         heart.setPosition(35, cc.winSize.height - 35);
@@ -244,6 +250,7 @@ var MMMainLayer = cc.Layer.extend({
             weiboDisabled,
             function () {
                 cc.log("点击微博按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         weibo.setPosition(90, cc.winSize.height - 35);
@@ -258,6 +265,7 @@ var MMMainLayer = cc.Layer.extend({
             facebookDisabled,
             function () {
                 cc.log("点击facebook按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         facebook.setPosition(145, cc.winSize.height - 35);
@@ -272,6 +280,7 @@ var MMMainLayer = cc.Layer.extend({
             chaozhiDisabled,
             function () {
                 cc.log("点击超值活动按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         chaozhi.setPosition(215, cc.winSize.height - 35);
@@ -286,6 +295,7 @@ var MMMainLayer = cc.Layer.extend({
             moregameDisabled,
             function () {
                 cc.log("点击更多游戏按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         moregame.setPosition(310, cc.winSize.height - 35);
@@ -304,6 +314,7 @@ var MMMainLayer = cc.Layer.extend({
             newsDisabled,
             function () {
                 cc.log("点击新闻按钮");
+                cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
             }.bind(this)
         );
         news.setPosition(cc.winSize.width - 32, cc.winSize.height - 35);
