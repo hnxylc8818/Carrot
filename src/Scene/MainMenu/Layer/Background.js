@@ -4,6 +4,7 @@ var MMBackgroundLayer = cc.Layer.extend({
 
         // 初始化资源
         cc.spriteFrameCache.addSpriteFrames(res.MMainScene_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.MMCheck_plist);
 
         // 加载背景
         this.loadBackground();

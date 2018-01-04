@@ -2,9 +2,16 @@ var MMMainLayer = cc.Layer.extend({
     actionDuration: 1,      // 时间基数，页面上所有节点运行的动作
     leaf2: null,
     leaf3: null,
+    isBossUnlock: "NO",
+    bossLock: null,
+    isNestUnlock: "NO",
+    nestLock: null,
+    unLockLayer:null,
     ctor: function () {
         this._super();
 
+        // 加载配置信息
+        this.loadConfig();
         // 加载 [冒险模式]、[BOSS模式]和[怪物窝] 菜单
         this.loadMenu();
         // 加载设置按钮
@@ -21,6 +28,13 @@ var MMMainLayer = cc.Layer.extend({
         this.loadCarrotFantasy();
         // 加载前景
         this.loadForeground();
+    },
+    // 加载配置信息
+    loadConfig: function () {
+        this.isBossUnlock = cc.sys.localStorage.getItem(Config.IS_BOSS_UNLOCK_KEY) || "NO";
+        this.isNestUnlock = cc.sys.localStorage.getItem(Config.IS_NEST_UNLOCK_KEY) || "NO";
+
+        this.registerEvent();
     },
     // 加载菜单
     loadMenu: function () {
@@ -52,6 +66,14 @@ var MMMainLayer = cc.Layer.extend({
             function () {
                 cc.log("点击Boss模式按钮");
                 cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
+                if (this.isBossUnlock === "NO"){
+                    // 未解锁，分发事件，打开解锁面板
+                    var event = new cc.EventCustom(jf.EventName.OPEN_UNLOCK_LAYER);
+                    event.setUserData(jf.EventName.UNLOCK_BOSS);
+                    cc.eventManager.dispatchEvent(event);
+                }else {
+                    cc.log("TODO：实现Boss模式功能");
+                }
             }.bind(this)
         );
         boss.setPosition(310, 45);
@@ -68,6 +90,14 @@ var MMMainLayer = cc.Layer.extend({
             function () {
                 cc.log("点击怪物窝按钮");
                 cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
+                if (this.isNestUnlock === "NO"){
+                    // 未解锁，分发事件，打开解锁面板
+                    var event = new cc.EventCustom(jf.EventName.OPEN_UNLOCK_LAYER);
+                    event.setUserData(jf.EventName.UNLOCK_NEST);
+                    cc.eventManager.dispatchEvent(event);
+                }else {
+                    cc.log("TODO：实现怪物窝功能");
+                }
             }.bind(this)
         );
         nest.setPosition(510, 45);
@@ -77,15 +107,22 @@ var MMMainLayer = cc.Layer.extend({
         this.addChild(menu);
         menu.setPosition(0, 0);
 
-        // 锁
-        var bossLocked = new cc.Sprite("#locked.png");
-        var nestLocked = new cc.Sprite("#locked.png");
+        // Boos模式 锁
+        if (this.isBossUnlock === "NO") {
+            var bossLocked = new cc.Sprite("#locked.png");
+            boss.addChild(bossLocked);
+            bossLocked.setPosition(boss.width - 12, boss.height / 2 - 7);
+            this.bossLock = bossLocked;
+        }
 
-        this.addChild(bossLocked);
-        this.addChild(nestLocked);
+        // 怪物窝 锁
+        if (this.isNestUnlock === "NO") {
+            var nestLocked = new cc.Sprite("#locked.png");
+            nest.addChild(nestLocked);
+            nestLocked.setPosition(nest.width - 12, nest.height / 2 - 7);
+            this.nestLock = nestLocked;
+        }
 
-        bossLocked.setPosition(cc.winSize.width / 2 + 85, 35);
-        nestLocked.setPosition(cc.winSize.width - 28, 35);
     },
     // 加载设置按钮
     loadSetting: function () {
@@ -158,32 +195,32 @@ var MMMainLayer = cc.Layer.extend({
         cloud1.setPosition(-100, cc.winSize.height - 100);
 
         // 云朵动作
-        var cloud1Move = new cc.MoveTo(this.actionDuration * 20,cc.p(cc.winSize.width + 100,cc.winSize.height - 100));
-        var cloud2Move = new cc.MoveTo(this.actionDuration * 20,cc.p(cc.winSize.width + 100,cc.winSize.height - 60));
-        this.cloud2Action(cloud2,cloud2Move);
+        var cloud1Move = new cc.MoveTo(this.actionDuration * 20, cc.p(cc.winSize.width + 100, cc.winSize.height - 100));
+        var cloud2Move = new cc.MoveTo(this.actionDuration * 20, cc.p(cc.winSize.width + 100, cc.winSize.height - 60));
+        this.cloud2Action(cloud2, cloud2Move);
         this.scheduleOnce(function () {
-            this.cloud1Action(cloud1,cloud1Move);
-        },5);
+            this.cloud1Action(cloud1, cloud1Move);
+        }, 5);
     },
     // 云朵动作
-    cloud2Action:function (cloud2,cloud2Move) {
+    cloud2Action: function (cloud2, cloud2Move) {
         cloud2.runAction(new cc.sequence(
             cloud2Move,
             cc.delayTime(2),
             cc.callFunc(function () {
-                cloud2.setPosition(-100,cc.winSize.height - 60);
-                this.cloud2Action(cloud2,cloud2Move);
-        },this)
+                cloud2.setPosition(-100, cc.winSize.height - 60);
+                this.cloud2Action(cloud2, cloud2Move);
+            }, this)
         ));
     },
-    cloud1Action:function (cloud1,cloud1Move) {
+    cloud1Action: function (cloud1, cloud1Move) {
         cloud1.runAction(new cc.sequence(
-           cloud1Move,
-           cc.delayTime(2),
-           cc.callFunc(function () {
-               cloud1.setPosition(-100, cc.winSize.height - 100);
-               this.cloud1Action(cloud1,cloud1Move);
-           },this)
+            cloud1Move,
+            cc.delayTime(2),
+            cc.callFunc(function () {
+                cloud1.setPosition(-100, cc.winSize.height - 100);
+                this.cloud1Action(cloud1, cloud1Move);
+            }, this)
         ));
     },
     // 加载萝卜
@@ -322,6 +359,53 @@ var MMMainLayer = cc.Layer.extend({
         var menu = new cc.Menu(heart, weibo, facebook, chaozhi, moregame, news);
         this.addChild(menu);
         menu.setPosition(0, 0);
+    },
+    // 注册自定义事件
+    registerEvent:function () {
+        var listenerOpenUnlockLayer = cc.EventListener.create({
+            event:cc.EventListener.CUSTOM,
+            target:this,
+            eventName:jf.EventName.OPEN_UNLOCK_LAYER,
+            callback:this.onLoadUnlockLayer
+        });
+        cc.eventManager.addListener(listenerOpenUnlockLayer,this);
+
+        var listenerUnLock = cc.EventListener.create({
+            event:cc.EventListener.CUSTOM,
+            target:this,
+            eventName:jf.EventName.UNLOCK,
+            callback:this.unLock
+        });
+        cc.eventManager.addListener(listenerUnLock,this);
+    },
+    // 加载未解锁界面回调
+    onLoadUnlockLayer:function (event) {
+        var target = event.getCurrentTarget();
+        var data = event.getUserData();
+        target.unLockLayer = new MMUnlockLayer(data);
+        target.addChild(target.unLockLayer);
+    },
+    // 解锁
+    unLock:function (event) {
+        var target = event.getCurrentTarget();
+        var data = event.getUserData();
+        if (data.isSuccess !== undefined && data.isSuccess){
+            var unLock = data.unLock;
+            switch (unLock){
+                case jf.EventName.UNLOCK_BOSS:
+                    // 解锁Boss模式
+                    cc.sys.localStorage.setItem(Config.IS_BOSS_UNLOCK_KEY,"YES");
+                    target.isBossUnlock = "YES";
+                    target.bossLock.removeFromParent();
+                    break;
+                case jf.EventName.UNLOCK_NEST:
+                    // 解锁怪物窝
+                    cc.sys.localStorage.setItem(Config.IS_NEST_UNLOCK_KEY,"YES");
+                    target.isNestUnlock = "YES";
+                    target.nestLock.removeFromParent();
+                    break;
+            }
+        }
     }
 });
 
