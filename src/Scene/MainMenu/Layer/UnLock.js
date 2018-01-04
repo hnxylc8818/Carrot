@@ -44,6 +44,9 @@ var MMUnlockLayer = cc.LayerColor.extend({
         node.setPosition(this.background.width / 2, this.background.height / 2 - 30);
         node.addTouchEventListener(function (sender, type) {
             switch (type) {
+                case ccui.Widget.TOUCH_BEGAN:
+                    cc.audioEngine.playEffect(res.Btn_Click_Effect_mp3);
+                    break;
                 case ccui.Widget.TOUCH_ENDED:
                     var event = new cc.EventCustom(jf.EventName.UNLOCK);
                     event.setUserData({
