@@ -54,7 +54,6 @@ var MMUnlockLayer = cc.LayerColor.extend({
                         unLock:data
                     });
                     cc.eventManager.dispatchEvent(event);
-                    sender.getParent().getParent().getParent().removeFromParent();
                     break;
             }
         })

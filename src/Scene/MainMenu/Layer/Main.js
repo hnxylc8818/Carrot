@@ -397,12 +397,14 @@ var MMMainLayer = cc.Layer.extend({
                     cc.sys.localStorage.setItem(Config.IS_BOSS_UNLOCK_KEY,"YES");
                     target.isBossUnlock = "YES";
                     target.bossLock.removeFromParent();
+                    target.unLockLayer.removeFromParent();
                     break;
                 case jf.EventName.UNLOCK_NEST:
                     // 解锁怪物窝
                     cc.sys.localStorage.setItem(Config.IS_NEST_UNLOCK_KEY,"YES");
                     target.isNestUnlock = "YES";
                     target.nestLock.removeFromParent();
+                    target.unLockLayer.removeFromParent();
                     break;
             }
         }
